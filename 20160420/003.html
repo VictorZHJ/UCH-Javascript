@@ -1,0 +1,43 @@
+<html>
+
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript" src="script.js"></script>
+</head>
+
+<body>
+    請輸入n值：<input id= "n"></input><br/><br/>
+    
+    
+    <p><div id="demo"></div></p>
+    <button type="button" onclick='main()'>計算</button>
+
+
+<script type="text/javascript">
+    function main()
+    {
+    var n,sum,i;
+
+    n = document.getElementById("n").value;
+    sum=0;
+    for(i=2; i<=n; i++)
+    {
+        sum=sum+(i-1)*i;
+    }
+
+    var s ;
+    
+    s = "1*2+2*3+3*4+…+(n-1)*n = " + sum ;
+ 
+ 
+
+    document.getElementById("demo").innerHTML = s;
+    return 0;
+
+    }
+    
+    
+</script>
+
+</body>
+</html>

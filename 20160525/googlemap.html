@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<style>
+    td{
+        border:1px solid  black;
+        text-align:right;
+    }
+</style>
+
+<script type="text/javascript" src="AJAX.js"></script>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkwbmJRAUhtxU_pzYzqjUZWWY2NDSypXI&callback=initMap" async defer>
+
+</script>
+<!--script src="https://maps.googleapis.com/maps/api/js" async defer>
+</script-->
+
+<script>
+
+function initMap() {
+  // Create a map object and specify the DOM element for display.
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 24.947399, lng: 121.229258},
+    scrollwheel: false,
+    zoom: 25
+  });
+  
+  var directionsDisplay = new google.maps.DirectionsRenderer({
+    map: map
+  });
+
+  // Set destination, origin and travel mode.
+  var request = {
+    destination: {lat: 24.947399 , lng: 121.229258}, //24.947399, 121.229258
+    origin: {lat: 24.953942, lng: 121.225741},  //24.953942, 121.225741
+    travelMode: google.maps.TravelMode.WALKING
+  };
+
+  // Pass the directions request to the directions service.
+  var directionsService = new google.maps.DirectionsService();
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      // Display the route on the map.
+      directionsDisplay.setDirections(response);
+    }
+  });
+  
+  
+  
+}
+
+google.maps.event.addDomListener(window, 'load', initMap);
+
+</script>
+    
+</head>
+
+<body>
+    
+    <h2>從中壢火車站走到健行科技大學的路線</h2>
+    
+    <div id='map' style="width:900px;height:600px"></div>
+
+
+</body>
+
+</html>

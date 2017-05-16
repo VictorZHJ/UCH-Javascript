@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+</head>
+
+<body>
+
+<button  onclick="f1()">點看看</button>
+
+<p  id="p1"  style="color:blue;  position:absolute;left:200px">
+測試文字
+</p>
+
+
+<script>
+
+function  f1(){
+var  p1  =  document.getElementById("p1");
+if  (p1.style.color  ==  "blue")  p1.style.color  =  "#ff3333";
+else  p1.style.color  =  "blue";
+
+p1.innerHTML  =  "XXX 正在考試!!!";
+
+p1.style.position  =  "absolute";
+//p1.style.left=  "200px";
+//p1.style.top=  "300px";
+
+}
+
+</script>
+
+</body>
+
+</html>

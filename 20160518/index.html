@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<style>
+    td{
+        border:1px solid  black;
+        text-align:right;
+    }
+</style>
+
+<script type="text/javascript" src="AJAX.js"></script>
+
+<script>
+
+function sendRequest(){
+    
+    //組 url 
+    var url = "https://javascript-victorzhj.c9users.io/20160511/curl.php?url=https://tw.quote.finance.yahoo.net/quote/q&type=ta&perd=5m&mkt=10&sym=";
+    url = url + document.getElementById("stockid").value;
+    
+    //送出請求
+    AJAXGet(url, handler);
+    
+}
+
+
+function handler(doc){
+    console.log(doc);
+    //alert(doc);
+    
+    //抓出實際的 json 文件 
+    var JSONDoc = doc.substring(5,doc.length-2);
+    
+    //解析 Json 文件 
+    var 股票資料 = JSON.parse(JSONDoc);
+
+    document.getElementById("stockName").innerHTML = 股票資料.mem.name;
+
+    var table = document.getElementById("stockRowdata");
+    while (table.rows.length >0) {   //清掉所有內容
+        table.deleteRow(0);
+    }
+
+    // Create an empty <tr> element and add it to the 1st position of the table:
+    var row = table.insertRow(-1);   //-1 表 插入最後一行
+    
+    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+    var cell = row.insertCell(-1);
+    cell.innerHTML = "日期";
+    
+    var cell = row.insertCell(-1);
+    cell.innerHTML = "開盤價";
+    
+    var cell = row.insertCell(-1);
+    cell.innerHTML = "最高價";
+    
+    var cell = row.insertCell(-1);
+    cell.innerHTML = "最低價";
+    
+    var cell = row.insertCell(-1);
+    cell.innerHTML = "收盤價";
+    
+    for(var i=0; i<股票資料.ta.length; i++ ){
+        
+        var row = table.insertRow(-1);   //-1 表 插入最後一行
+
+        var cell = row.insertCell(-1);
+        cell.innerHTML = 股票資料.ta[i].t;
+        
+        var cell = row.insertCell(-1);
+        cell.innerHTML = 股票資料.ta[i].o;
+        
+        var cell = row.insertCell(-1);
+        cell.innerHTML = 股票資料.ta[i].h;
+        
+        var cell = row.insertCell(-1);
+        cell.innerHTML = 股票資料.ta[i].l;
+        
+        var cell = row.insertCell(-1);
+        cell.innerHTML = 股票資料.ta[i].c;
+    }
+    
+    draw(股票資料);
+
+}
+
+
+//--------------------------------------------------------------------------
+// 畫圖測試
+//--------------------------------------------------------------------------
+function draw(股票資料) {
+    
+    var 圖寬 = 800;
+    var 圖高 = 500;
+    var 圖中線高 = 圖高 /2;
+
+    var canvas = document.getElementById('canvas1');
+    if (!canvas.getContext) {
+      
+      alert("不支援 canvas!!!");
+      return ;
+      
+    }
+  
+    var ctx = canvas.getContext('2d');
+    
+    ctx.clearRect(0,0,圖寬, 圖高);
+    
+    //ctx.fillRect(25,25,100,100);
+    //ctx.clearRect(45,45,60,60);
+    
+    //線的顏色
+    ctx.strokeStyle = "rgba(255,0,0,1)";
+    
+    //線的寬度
+    ctx.lineWidth =1;
+    
+    //畫 中空的矩形
+    ctx.strokeRect(0,0,圖寬,圖高);
+    //ctx.fillRect(120,120,300,200);  //線條和填滿的顏色是各自設定的
+    
+    
+    //先從資料中 抓出 開盤+收盤+最高+最低 的平均，作為中間值，以方便顯示 K線
+    var 中間值 =0, sum=0, maxValue=股票資料.ta[0].h, minValue=股票資料.ta[0].l;
+    for(var i=0; i<股票資料.ta.length; i++ ){
+        sum += 股票資料.ta[i].o + 股票資料.ta[i].h + 股票資料.ta[i].l + 股票資料.ta[i].c;
+        if (maxValue < 股票資料.ta[i].h) maxValue = 股票資料.ta[i].h;
+        if (minValue > 股票資料.ta[i].l) minValue = 股票資料.ta[i].l;
+    }
+    
+    中間值 = sum /4/股票資料.ta.length;
+    
+    var 最大值距 = maxValue - 中間值;
+    if (最大值距 < 中間值-minValue) 最大值距 = 中間值-minValue;
+    
+    
+    for(var i=0; i<股票資料.ta.length; i++ ){
+        
+        var 高點 = 圖中線高 - (股票資料.ta[i].h - 中間值)/最大值距 *圖中線高;
+        var 低點 = 圖中線高 - (股票資料.ta[i].l - 中間值)/最大值距 *圖中線高;
+        var 開盤點 = 圖中線高 - (股票資料.ta[i].o - 中間值)/最大值距 *圖中線高;
+        var 收盤點 = 圖中線高 - (股票資料.ta[i].c - 中間值)/最大值距 *圖中線高;
+        
+        var 寬度 = Math.floor(圖寬 /股票資料.ta.length);//捨去法 求整數
+        var left = i*寬度  ;
+        var 高度 = 開盤點 - 收盤點;
+        //矩形的顏色
+        ctx.fillStyle = "rgba(255,0,0,1)";
+        
+        var top = 開盤點;
+        if (top > 收盤點) top = 收盤點;
+        if (高度 <0) {
+            //線的顏色
+            ctx.fillStyle = "rgba(0,255,0,1)";
+            
+            高度 = -1*高度;
+        }
+        if (高度 ===0) 高度 =1;
+        
+        //線的顏色
+        ctx.strokeStyle = "rgba(0,0,0,1)";
+
+        //畫 突出去的部份
+        ctx.strokeRect(left +寬度/2, 開盤點, 1, 低點-開盤點);   //畫 主矩形的部份
+        ctx.strokeRect(left +寬度/2, 高點, 1, 開盤點-高點);   //畫 主矩形的部份
+
+        ctx.fillRect(left+2, top,寬度-4, 高度);   //畫 主矩形的部份
+        
+        //畫 中空的矩形
+        ctx.strokeRect(left+2, top,寬度-4, 高度);
+
+        
+
+    }
+}
+
+
+</script>
+    
+</head>
+
+<body>
+    
+    <div>股票代號：<input id = "stockid" name="stockid"></input> <button onclick="sendRequest()">送出</button></div>
+    
+    <!--<button onclick="AJAXGet('midterm1_20160427.html', handler);">取回網頁</button>-->
+    <!--<pre id ="demo"></pre>-->
+    <!--<pre id ="demo2"></pre>-->
+    
+    <div>股票名稱：<span id="stockName"></span></div>
+    
+    <div>每日資料：<br/>
+        <table id="stockRowdata" ></table>
+    
+    </div>
+    
+    <canvas id="canvas1" width="840" height="540" style="position:fixed;left:400px;top:100px;"></canvas>
+
+</body>
+
+</html>

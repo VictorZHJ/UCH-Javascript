@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<style>
+    td{
+        border:1px solid  black;
+        text-align:right;
+    }
+</style>
+
+<script type="text/javascript" src="AJAX.js"></script>
+
+<script>
+
+function sendRequest(){
+    
+    //組 url 
+    var url = "https://javascript-victorzhj.c9users.io/20160511/curl.php?url=https://tw.quote.finance.yahoo.net/quote/q&type=tick&perd=1m&mkt=10&sym=";
+    url = url + document.getElementById("stockid").value;
+    
+    //送出請求
+    AJAXGet(url, handler);
+    
+}
+
+
+function handler(doc){
+    console.log(doc);
+    //alert(doc);
+    
+    //抓出實際的 json 文件 
+    var JSONDoc = doc.substring(5,doc.length-2);
+    
+    //解析 Json 文件 
+    var 股票資料 = JSON.parse(JSONDoc);
+
+    document.getElementById("stockName").innerHTML = 股票資料.mem.name;
+
+    var table = document.getElementById("stockRowdata");
+
+    // Create an empty <tr> element and add it to the 1st position of the table:
+    var row = table.insertRow(-1);   //-1 表 插入最後一行
+    
+    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+    var cell = row.insertCell(-1);
+    cell.innerHTML = "時間";
+    
+    var cell = row.insertCell(-1);
+    cell.innerHTML = "成交價";
+    
+    var cell = row.insertCell(-1);
+    cell.innerHTML = "成交量";
+    
+    for(var i=0; i<股票資料.tick.length; i++ ){
+        
+        var row = table.insertRow(-1);   //-1 表 插入最後一行
+
+        var cell = row.insertCell(-1);
+        cell.innerHTML = 股票資料.tick[i].t;
+        
+        var cell = row.insertCell(-1);
+        cell.innerHTML = 股票資料.tick[i].p;
+        
+        var cell = row.insertCell(-1);
+        cell.innerHTML = 股票資料.tick[i].v;
+    }
+
+}
+
+
+</script>
+    
+</head>
+
+<body>
+    
+    <div>股票代號：<input id = "stockid" name="stockid"></input> <button onclick="sendRequest()">送出</button></div>
+    
+    <!--<button onclick="AJAXGet('midterm1_20160427.html', handler);">取回網頁</button>-->
+    <!--<pre id ="demo"></pre>-->
+    <!--<pre id ="demo2"></pre>-->
+    
+    <div>股票名稱：<span id="stockName"></span></div>
+    
+    <div>每日資料：<br/>
+        <table id="stockRowdata" ></table>
+    
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+
+<html>
+<head>
+<!--
+// 相加及相乘
+// 鍾皓鈞 20160420
+// 參數： a, b
+// 結果： a+b & a*b
+-->
+<meta charset="UTF-8">
+<script type="text/javascript" src="script.js"></script>
+</head>
+
+<body>
+    請輸入A值：<input id= "A"></input><br/>
+    請輸入B值：<input id= "B"></input><br/>
+    
+    
+    <p><div id="AAA"></div></p>
+    <p><div id="BBB"></div></p>
+    <button type="button" onclick='AA()'>相加</button>
+    <button type="button" onclick='BB()'>相乘</button>
+
+<script type="text/javascript">
+    function AA()
+    {
+    var A,B,C,cc;
+
+    A = document.getElementById("A").value;
+    B = document.getElementById("B").value;
+    C =A*1+B*1;
+
+    var s ;
+    
+    s = "A + B = " + C + "<br/>";
+ 
+
+    document.getElementById("AAA").innerHTML = s;
+    return 0;
+
+    }
+    
+    function BB()
+    {
+    var A,B,C,cc;
+
+    A = document.getElementById("A").value;
+    B = document.getElementById("B").value;
+    C = A*B;
+
+    var s ;
+    
+    s = "A x B = " + C + "<br/>";
+ 
+
+    document.getElementById("BBB").innerHTML = s;
+    return 0;
+
+    }
+    
+    
+</script>
+
+</body>
+</html>

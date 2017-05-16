@@ -1,0 +1,42 @@
+<html>
+
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript" src="script.js"></script>
+</head>
+
+<body>
+    請輸入A值：<input id= "A"></input><br/><br/>
+    請輸入B值：<input id= "B"></input><br/><br/>
+    
+    
+    <p><div id="demo"></div></p>
+    <button type="button" onclick='main()'>計算</button>
+
+
+<script type="text/javascript">
+    function main()
+    {
+    var A,B,C,cc;
+
+    A = document.getElementById("A").value;
+    B = document.getElementById("B").value;
+    C = (A/B)*100;
+    cc = C.toPrecision(4);
+
+    var s ;
+    
+    s = "A 是B 的" + cc + "%";
+ 
+ 
+
+    document.getElementById("demo").innerHTML = s;
+    return 0;
+
+    }
+    
+    
+</script>
+
+</body>
+</html>

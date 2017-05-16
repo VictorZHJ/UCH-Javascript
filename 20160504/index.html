@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script type="text/javascript" src="AJAX.js"></script>
+
+<script>
+
+function handler(doc){
+    console.log(doc);
+    alert(doc);
+    document.getElementById("demo").innerHTML = doc;   
+}
+
+
+</script>
+    
+</head>
+
+<body>
+    <p >輸入代碼： <input name ='x' id="x"></input></p>
+    <button onclick="AJAXGet('curl.php?url=https://tw.quote.finance.yahoo.net/quote/q&type=ta&perd=d&mkt=10&sym=' + document.getElementById('x').value, handler);">取回網頁</button>
+    <pre id ="demo"></pre>
+</body>
+
+</html>

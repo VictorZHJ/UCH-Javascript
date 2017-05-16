@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<script>
+    
+    
+var xhttp;
+if (window.XMLHttpRequest) {
+    xhttp = new XMLHttpRequest();
+    } else {
+    // code for IE6, IE5
+    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+}
+
+
+function getPage(){
+    xhttp.onreadystatechange = responseHandler();
+    
+    xhttp.open("GET", "001.html", true);
+    xhttp.send();    
+    
+}
+
+function responseHandler(){
+  if (xhttp.readyState == 4 && xhttp.status == 200) {
+    console.log(xhttp.responseText);
+    alert(xhttp.responseText);
+    document.getElementById("demo").innerHTML = xhttp.responseText;
+  }
+    
+}
+
+</script>
+    
+</head>
+
+<body>
+    
+    <button onclick="getPage()">取回網頁</button>
+    <pre id ="demo"></pre>
+</body>
+
+</html>
